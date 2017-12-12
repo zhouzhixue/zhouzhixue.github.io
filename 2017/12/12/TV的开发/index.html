@@ -79,12 +79,16 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="志学博客">
-<meta property="og:url" content="http://yoursite.com/index.html">
+<meta name="description" content="1.需要注意的地放是tv的app跟手机的app在manifist里的配置不同,在tv端我们需要一个过滤器 是leanBack lancher 跟手机上的不一样.主要通过几个类inputmanagerService AndroidManifest中这个required为了适应手机等最好设置成true 添加category 属性为leanback_lanuncher">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TV的开发">
+<meta property="og:url" content="http://yoursite.com/2017/12/12/TV的开发/index.html">
 <meta property="og:site_name" content="志学博客">
+<meta property="og:description" content="1.需要注意的地放是tv的app跟手机的app在manifist里的配置不同,在tv端我们需要一个过滤器 是leanBack lancher 跟手机上的不一样.主要通过几个类inputmanagerService AndroidManifest中这个required为了适应手机等最好设置成true 添加category 属性为leanback_lanuncher">
+<meta property="og:updated_time" content="2017-12-12T03:32:40.141Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="志学博客">
+<meta name="twitter:title" content="TV的开发">
+<meta name="twitter:description" content="1.需要注意的地放是tv的app跟手机的app在manifist里的配置不同,在tv端我们需要一个过滤器 是leanBack lancher 跟手机上的不一样.主要通过几个类inputmanagerService AndroidManifest中这个required为了适应手机等最好设置成true 添加category 属性为leanback_lanuncher">
 
 
 
@@ -114,13 +118,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/"/>
+  <link rel="canonical" href="http://yoursite.com/2017/12/12/TV的开发/"/>
 
 
 
 
 
-  <title>志学博客</title>
+  <title>TV的开发 | 志学博客</title>
   
 
 
@@ -139,8 +143,7 @@
     
   
 
-  <div class="container sidebar-position-left 
-  page-home">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -213,9 +216,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
 
   
 
@@ -245,9 +248,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/12/12/TV的开发/" itemprop="url">TV的开发</a></h1>
+          <h1 class="post-title" itemprop="name headline">TV的开发</h1>
         
 
         <div class="post-meta">
@@ -297,9 +298,7 @@
       
 
       
-        
-          
-            <p>1.需要注意的地放是tv的app跟手机的app在manifist里的配置不同,在tv端我们需要一个过滤器 是leanBack lancher 跟手机上的不一样.<br>主要通过几个类<br>inputmanagerService</p>
+        <p>1.需要注意的地放是tv的app跟手机的app在manifist里的配置不同,在tv端我们需要一个过滤器 是leanBack lancher 跟手机上的不一样.<br>主要通过几个类<br>inputmanagerService</p>
 <p>AndroidManifest中这个required为了适应手机等最好设置成true</p>
 <p><uses-feature android:name="android.software.leanback" android:required="false"><br>添加category 属性为leanback_lanuncher</uses-feature></p>
 <p><activity android:name=".fastlane.LeanbackActivity" android:label="@string/title_activity_player" android:theme="@style/AppTheme"><br>        <intent-filter><br>            <action android:name="android.intent.action.MAIN"><br>            <category android:name="android.intent.category.LEANBACK_LAUNCHER"><br>        </category></action></intent-filter><br></activity><br>如果需要用到这些属性就需要将required制成false<br>Touchscreen android.hardware.touchscreen<br>Telephony android.hardware.telephony<br>Camera android.hardware.camera<br>Near Field Communications (NFC) android.hardware.nfc<br>GPS android.hardware.location.gps<br>Microphone android.hardware.microphone</p>
@@ -371,8 +370,6 @@ for (int position = 0; position &lt; HEADERS.length; position++) {
 </code></pre><p>}</p>
 <p>Update VideoDataManager to use CursorObjectAdapter<br>Here, we’ll update our VideoDataManager to manage the cursor for our ObjectAdapter.<br>In data/VideoDataManager add an ObjectAdapter to the class VideoDataManager.<br>private ObjectAdapter mItemList;<br>Next, add ObjectAdapter as fourth parameter to VideoDataManager constructor and store the ObjectAdapter as mItemList.<br>public VideoDataManager(Context mContext, LoaderManager mLoaderManager, Uri mRowUri, ObjectAdapter rowContents) {<br>    mItemList = rowContents;<br>    ….<br>}<br>In VideoDataManager set the LOADER_ID to a random integer and replace the video instantiation with setting the mapper for mItemList.<br>LOADER_ID = Double.valueOf(Math.random() * Integer.MAX_VALUE).intValue();<br>((CursorObjectAdapter)mItemList).setMapper(mMapper);<br>Create the a getter for the ObjectAdapter.<br>public ObjectAdapter getItemList() {<br>    return mItemList;<br>}<br>Update VideoItemMapper to extend CursorMapper.<br>public static class VideoItemMapper extends CursorMapper {<br>Update onLoadFinished to set the cursor for mItemList.<br>public void onLoadFinished(Loader<cursor> cursorLoader, Cursor cursor) {<br>    if (mItemList instanceof CursorObjectAdapter) {<br>        ((CursorObjectAdapter) mItemList).swapCursor(cursor);<br>    }<br>}<br>Fill in onLoaderReset to set the Cursor as null.<br>public void onLoaderReset(Loader<cursor> cursorLoader) {<br>    if (mItemList instanceof CursorObjectAdapter) {<br>        ((CursorObjectAdapter) mItemList).swapCursor(null);<br>    }<br>}<br>Congrats! You’ve completed this step. Try running the app on Android TV.</cursor></cursor></p>
 
-          
-        
       
     </div>
     
@@ -382,6 +379,30 @@ for (int position = 0; position &lt; HEADERS.length; position++) {
     
 
     
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>点击打赏</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>Donate</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="https://wx3.sinaimg.cn/mw1024/0069SjSogy1fehm92iudaj30go0p00ts.jpg" alt="zzx Alipay"/>
+        <p>Alipay</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
 
     
 
@@ -389,147 +410,28 @@ for (int position = 0; position &lt; HEADERS.length; position++) {
       
 
       
-
-      
-
       
       
-        <div class="post-eof"></div>
+
       
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/12/08/第一天接触python/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="zzx">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="志学博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/12/08/第一天接触python/" itemprop="url">第一天接触python</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
             
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Veröffentlicht am</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-12-08T14:35:28+08:00">
-                2017-12-08
-              </time>
+              <a href="/2017/12/08/第一天接触python/" rel="next" title="第一天接触python">
+                <i class="fa fa-chevron-left"></i> 第一天接触python
+              </a>
             
+          </div>
 
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
             
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
+          </div>
         </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
       
 
       
-        
-          
-            <h1 id="python的入门第一天"><a href="#python的入门第一天" class="headerlink" title="python的入门第一天"></a>python的入门第一天</h1><blockquote>
-<p>我个人觉得语言是想通的,在我学会java后觉得再学习跟它很像的python时,我觉的挺容易入手的.</p>
-</blockquote>
-<p>首先来说都存在变量,常量,基本运算符号,还包括赋值运算符</p>
-<ul>
-<li>这里注意一下:存在一个简单四舍五入的方法 round(num) 还有根据python的版本不一样,语法也不太一样,最简单的2.7版本print””111111” .<br>而3.3版本就是print(aaa)</li>
-</ul>
-<ol>
-<li>还有注意的是python有着严格的对齐方式,如果因为对齐导致的错误,会很难找到</li>
-<li>python的导包很简单 例如:import time 就是导入时间的包 time.time()方法获取当前时间</li>
-<li>java中类型转换如int 转string 我们会用String.valueOf() 1. 1. 4.string转int我们会用Integer.parseInt()</li>
-<li>而python中是 num(String) str(int)  </li>
-<li>当我们想看一个变量的类型的时候我们用type(num)</li>
-<li>python中同样有科学技术的方法比如: 1.5E3 就是1.5乘10的三次方</li>
-<li></li>
-</ol>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
       
     </footer>
   </div>
@@ -539,442 +441,11 @@ for (int position = 0; position &lt; HEADERS.length; position++) {
   </article>
 
 
-    
-      
 
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/12/07/Button去除阴影/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="zzx">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="志学博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/12/07/Button去除阴影/" itemprop="url">Button去除阴影</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Veröffentlicht am</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-12-07T17:04:50+08:00">
-                2017-12-07
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="添加以下样式-无边界-borderless"><a href="#添加以下样式-无边界-borderless" class="headerlink" title="添加以下样式(无边界(borderless))"></a>添加以下样式(无边界(borderless))</h2><p>style=”?android:attr/borderlessButtonStyle”</p>
-
-          
-        
+    <div class="post-spread">
       
     </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
   </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/12/07/文件下载并存图片格式-并在图库显示/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="zzx">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="志学博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/12/07/文件下载并存图片格式-并在图库显示/" itemprop="url">文件下载并存图片格式,并在图库显示</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Veröffentlicht am</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-12-07T16:05:16+08:00">
-                2017-12-07
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="前提是-compile-‘com-liulishuo-filedownloader-library-1-6-8’"><a href="#前提是-compile-‘com-liulishuo-filedownloader-library-1-6-8’" class="headerlink" title="前提是:compile ‘com.liulishuo.filedownloader:library:1.6.8’"></a>前提是:compile ‘com.liulishuo.filedownloader:library:1.6.8’</h2><p>private void download() {<br>    FileDownloader.setup(PhotosDetailActivity.this);</p>
-<pre><code>System.out.println(&quot;绝对路径:&quot;+FileUtils.createSDRootPath(PhotosDetailActivity.this));
-System.out.println(&quot;绝对路径:+11111111111111111&quot;);
-System.out.println(&quot;绝对路径:&quot;+FileUtils.getImageSDPath(PhotosDetailActivity.this));
-String url = getIntent().getStringExtra(AppConstant.PHOTO_DETAIL);
-System.out.println(&quot;url:&quot;+url);
-FileDownloader.getImpl().create(url)
-        .setPath(FileUtils.getImageSDPath(PhotosDetailActivity.this),true)
-        .setListener(new FileDownloadListener() {
-            @Override
-            protected void pending(BaseDownloadTask task, int soFarBytes, int totalBytes) {
-                System.out.println(&quot;pending&quot;);
-            }
-
-            @Override
-            protected void connected(BaseDownloadTask task, String etag, boolean isContinue, int soFarBytes, int totalBytes) {
-                System.out.println(&quot;conneted:&quot;);
-            }
-
-            @Override
-            protected void progress(BaseDownloadTask task, int soFarBytes, int totalBytes) {
-                System.out.println(&quot;progress:&quot;);
-            }
-
-            @Override
-            protected void blockComplete(BaseDownloadTask task) {
-                System.out.println(&quot;blockcomplet:&quot;);
-            }
-
-            @Override
-            protected void retry(final BaseDownloadTask task, final Throwable ex, final int retryingTimes, final int soFarBytes) {
-                System.out.println(&quot;retry:&quot;);
-            }
-
-            @Override
-            protected void completed(BaseDownloadTask task) {
-                ToastUitl.showShort(&quot;下载完成&quot;);
-                System.out.println(&quot;getTargetFilePath:&quot;+task.getTargetFilePath());
-                System.out.println(&quot;getFilename:&quot;+task.getFilename());
-
-                try {
-                    File file = new File(FileUtils.getImageSDPath(PhotosDetailActivity.this)+File.separator + task.getFilename() + &quot;.jpg&quot;);
-                    System.out.println(&quot;file.getPath():&quot;+file.getPath());
-                    Bitmap mBitmap=  BitmapFactory.decodeFile(task.getTargetFilePath());
-                    FileOutputStream out = new FileOutputStream(file);;
-                    mBitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
-                    out.flush();
-                    out.close();
-                    //保存图片后发送广播通知更新数据库
-                    Uri uri = Uri.fromFile(file);
-                    sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            protected void paused(BaseDownloadTask task, int soFarBytes, int totalBytes) {
-                System.out.println(&quot;paused:&quot;);
-            }
-
-            @Override
-            protected void error(BaseDownloadTask task, Throwable e) {
-                System.out.println(&quot;error:&quot;);
-            }
-
-            @Override
-            protected void warn(BaseDownloadTask task) {
-                System.out.println(&quot;warn:&quot;);
-            }
-        }).start();
-</code></pre><p>}</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/12/07/Glide去除本地图片缓存/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="zzx">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="志学博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/12/07/Glide去除本地图片缓存/" itemprop="url">Glide的去除图片缓存问题</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Veröffentlicht am</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-12-07T15:20:00+08:00">
-                2017-12-07
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>glide<br>Glide.with(OCRResultActivity.this).load(frontIdcard).skipMemoryCache( true ).diskCacheStrategy( DiskCacheStrategy.NONE ).into(imgFrontIdcard);//去除缓存的glide</p>
-<p>.skipMemoryCache().disCacheStrategy(DiskCacheStrategy.none)</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-  </section>
-
-  
 
 
           </div>
@@ -982,6 +453,10 @@ FileDownloader.getImpl().create(url)
 
 
           
+
+  
+
+
 
         </div>
         
@@ -1180,6 +655,10 @@ FileDownloader.getImpl().create(url)
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
 
   
 
