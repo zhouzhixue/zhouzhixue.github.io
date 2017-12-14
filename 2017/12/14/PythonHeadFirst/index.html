@@ -85,7 +85,7 @@
 <meta property="og:url" content="http://yoursite.com/2017/12/14/PythonHeadFirst/index.html">
 <meta property="og:site_name" content="志学博客">
 <meta property="og:description" content="● 1基于python3,0  ● 2 python -v  ● 3 print(“”)  ● 4 列表 movies = [“11111111111”,”222222”,”3333333333”]  ● 5通过 movies[2]类似于java中的数组  ● 6.len(movies) 相当于java中的movies.length  ● 7可以在列表最后一项添加append(“1111”)">
-<meta property="og:updated_time" content="2017-12-14T08:39:26.329Z">
+<meta property="og:updated_time" content="2017-12-14T08:44:21.267Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="PythonHeadFirst">
 <meta name="twitter:description" content="● 1基于python3,0  ● 2 python -v  ● 3 print(“”)  ● 4 列表 movies = [“11111111111”,”222222”,”3333333333”]  ● 5通过 movies[2]类似于java中的数组  ● 6.len(movies) 相当于java中的movies.length  ● 7可以在列表最后一项添加append(“1111”)">
@@ -315,7 +315,16 @@
 <h1 id="count-0"><a href="#count-0" class="headerlink" title="count = 0"></a>count = 0</h1><h1 id="while-count-lt-len-movies"><a href="#while-count-lt-len-movies" class="headerlink" title="while count &lt; len(movies):"></a>while count &lt; len(movies):</h1><h1 id="print-movies-count"><a href="#print-movies-count" class="headerlink" title="print(movies[count])"></a>print(movies[count])</h1><h1 id="count-count-1"><a href="#count-count-1" class="headerlink" title="count = count+1"></a>count = count+1</h1><p>#命名规则很简单就是def 加方法名称 加:       注意:Python中的空格是有用的 不能随便空格 比如:最后一个getItem()如果前面有空额不能执行<br>        def getItem( islist):<br>            if isinstance(islist,list):<br>            for item in islist:<br>                if isinstance(item ,list):<br>                    getItem(item)<br>                else:<br>                     print(item)</p>
 <pre><code>getItem(movies)
 </code></pre><p>###</p>
+<pre><code>def getItem( islist):
+        if isinstance(islist,list):
+        for item in islist:
+            if isinstance(item ,list):
+                getItem(item)
+            else:
+                 print(item)
 
+getItem(movies)
+</code></pre>
       
     </div>
     
