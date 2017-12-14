@@ -181,7 +181,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            Startseite
+            Home
           </a>
         </li>
       
@@ -191,7 +191,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
-            Archiv
+            Archives
           </a>
         </li>
       
@@ -214,6 +214,131 @@
           <div id="content" class="content">
             
   <section id="posts" class="posts-expand">
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/12/14/PythonHeadFirst/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="zzx">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="志学博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/12/14/PythonHeadFirst/" itemprop="url">First</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-12-14T16:03:43+08:00">
+                2017-12-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>  ● 1基于python3,0<br>  ● 2 python -v<br>  ● 3 print(“”)<br>  ● 4 列表 movies = [“11111111111”,”222222”,”3333333333”]<br>  ● 5通过 movies[2]类似于java中的数组<br>  ● 6.len(movies) 相当于java中的movies.length<br>  ● 7可以在列表最后一项添加append(“1111”)  或者删除一项 pop() 或者 在最后添加一个集合项用.extend()<br>  ● 8 remove()是删除项    insert()是在指定位置插入项<br>  ● 9 python 的列表可以存储不同类型的数据,具体来说是任意类型的数据包括混合数据类型例如:  [“1234”,”abc”,122222,12345678.0000001111]<br>  ● 10  for item  in  movies:<br>  ● 函数命名 def getName()</p>
+<p>movies=[“1”,”2”,1233,[“1”,1,[“2222”,000]]]</p>
+<h1 id="for-i-in-movies-print-i"><a href="#for-i-in-movies-print-i" class="headerlink" title="for i in movies:   print(i)"></a>for i in movies:   print(i)</h1><p>for i in  movies:<br>    if isinstance(i,list):<br>        for ii in i:<br>            if isinstance(ii,list):<br>                for iii in ii :<br>                    print(iii)<br>            else:<br>                print(ii)<br>            print(ii)<br>    else:<br>        print(i)</p>
+<h1 id="if-isinstance-movies-list"><a href="#if-isinstance-movies-list" class="headerlink" title="if isinstance(movies,list):"></a>if isinstance(movies,list):</h1><h1 id="print-“233333”"><a href="#print-“233333”" class="headerlink" title="print(“233333”)"></a>print(“233333”)</h1><h1 id="else"><a href="#else" class="headerlink" title="else:"></a>else:</h1><h1 id="print-movies"><a href="#print-movies" class="headerlink" title="print(movies)"></a>print(movies)</h1><p>print(“zzzzzzzzzzzzzzzzzzzzzzzzzzzz”)</p>
+<h1 id="count-0"><a href="#count-0" class="headerlink" title="count = 0"></a>count = 0</h1><h1 id="while-count-lt-len-movies"><a href="#while-count-lt-len-movies" class="headerlink" title="while count &lt; len(movies):"></a>while count &lt; len(movies):</h1><h1 id="print-movies-count"><a href="#print-movies-count" class="headerlink" title="print(movies[count])"></a>print(movies[count])</h1><h1 id="count-count-1"><a href="#count-count-1" class="headerlink" title="count = count+1"></a>count = count+1</h1><p>#命名规则很简单就是def 加方法名称 加:       注意:Python中的空格是有用的 不能随便空格 比如:最后一个getItem()如果前面有空额不能执行<br>    def getItem( islist):<br>    if isinstance(islist,list):<br>        for item in islist:<br>            if isinstance(item ,list):<br>                getItem(item)<br>            else:<br>                 print(item)</p>
+<pre><code>getItem(movies)
+</code></pre>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
     
       
 
@@ -257,7 +382,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Veröffentlicht am</span>
+                <span class="post-meta-item-text">Posted on</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-12-12T11:31:51+08:00">
                 2017-12-12
@@ -447,7 +572,7 @@ for (int position = 0; position &lt; HEADERS.length; position++) {
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Veröffentlicht am</span>
+                <span class="post-meta-item-text">Posted on</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-12-08T14:35:28+08:00">
                 2017-12-08
@@ -582,7 +707,7 @@ for (int position = 0; position &lt; HEADERS.length; position++) {
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Veröffentlicht am</span>
+                <span class="post-meta-item-text">Posted on</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-12-07T17:04:50+08:00">
                 2017-12-07
@@ -702,7 +827,7 @@ for (int position = 0; position &lt; HEADERS.length; position++) {
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Veröffentlicht am</span>
+                <span class="post-meta-item-text">Posted on</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-12-07T16:05:16+08:00">
                 2017-12-07
@@ -893,7 +1018,7 @@ FileDownloader.getImpl().create(url)
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Veröffentlicht am</span>
+                <span class="post-meta-item-text">Posted on</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-12-07T15:20:00+08:00">
                 2017-12-07
@@ -1018,8 +1143,8 @@ FileDownloader.getImpl().create(url)
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">5</span>
-                  <span class="site-state-item-name">Artikel</span>
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">posts</span>
                 </a>
               </div>
             
@@ -1071,7 +1196,7 @@ FileDownloader.getImpl().create(url)
 </div>
 
 
-  <div class="powered-by">Erstellt mit  <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
 
 
 
