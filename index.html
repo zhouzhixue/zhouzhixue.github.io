@@ -181,7 +181,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            Startseite
+            Accueil
           </a>
         </li>
       
@@ -191,7 +191,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
-            Archiv
+            Archives
           </a>
         </li>
       
@@ -214,6 +214,337 @@
           <div id="content" class="content">
             
   <section id="posts" class="posts-expand">
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/12/19/js和android的webView的互调的实践/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="zzx">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="志学博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/12/19/js和android的webView的互调的实践/" itemprop="url">js和android的webView的互调的实践</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posté le</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-12-19T14:08:26+08:00">
+                2017-12-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>package mvp.zzx.com.abc;</p>
+<p>import android.graphics.Bitmap;<br>import android.net.Uri;<br>import android.support.v7.app.AppCompatActivity;<br>import android.os.Bundle;<br>import android.util.Log;<br>import android.webkit.JavascriptInterface;<br>import android.webkit.JsResult;<br>import android.webkit.ValueCallback;<br>import android.webkit.WebChromeClient;<br>import android.webkit.WebSettings;<br>import android.webkit.WebView;<br>import android.webkit.WebViewClient;<br>import android.widget.Toast;</p>
+<p>public class MainActivity extends AppCompatActivity {</p>
+<pre><code>private WebView webView;
+
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+ String   url=&quot;http://192.168.1.173:8080/xm1/111111111.html&quot;;
+    setContentView(R.layout.activity_main);
+    webView = (WebView) findViewById(R.id.webview);
+    initWebview();
+    webView.loadUrl(url);
+}
+private void initWebview() {
+
+    webView.getSettings().setJavaScriptEnabled(true);
+    webView.getSettings().setDomStorageEnabled(true);//dom  store
+    webView.getSettings().setAllowFileAccess(true);//默认就是允许的
+    webView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
+    webView.getSettings().setAppCacheEnabled(false);//设置app缓存
+    webView.getSettings().setDatabaseEnabled(true);//设置数据库
+    webView.setWebViewClient(new MyWebViewClient());
+    webView.setWebChromeClient(new MyWebChromeClient());
+    //这里运用了js调java
+   // webView.addJavascriptInterface(this,&quot;GuaniuWebBridge&quot;);
+    webView.addJavascriptInterface(this,&quot;html5&quot;);//这里的name是自定义的跟js端相同即可
+    //只需js端调用backTop方法即可  window.html5.backTop();
+
+    //H5端
+</code></pre><p>/*        &lt;!DOCTYPE html&gt;</p>
+<p><html><br>   <head><br>      <meta charset="UTF-8"><br>      <title></title><br>   </head><br>   <body><br>   <button onclick="toastMessage()">返回上层</button><br>   <script type="text/javascript"><br>                function toastMessage() {<br>            window.html5.backTop()<br>        }<br>   </script><br>   </body><br></html>*/<br>    }<br>    @JavascriptInterface<br>    public void backTop(){<br>        Toast.makeText(this,”js调用了java的方法成功”,Toast.LENGTH_LONG).show();<br>    }</p>
+<pre><code>final private class MyWebChromeClient extends WebChromeClient {
+
+
+    @Override
+    public void onReceivedTitle(WebView view, String title) {
+        super.onReceivedTitle(view, title);
+        //textViewTitle.setText(title);
+    }
+
+    // For Android &lt; 3.0
+    public void openFileChooser(ValueCallback&lt;Uri&gt; valueCallback) {
+      //  uploadMessage = valueCallback;
+       // openImageChooserActivity();
+    }
+
+    // For Android  &gt;= 3.0
+    public void openFileChooser(ValueCallback valueCallback, String acceptType) {
+      //  uploadMessage = valueCallback;
+      //  openImageChooserActivity();
+    }
+
+    //For Android  &gt;= 4.1
+    public void openFileChooser(ValueCallback&lt;Uri&gt; valueCallback, String acceptType, String capture) {
+       // uploadMessage = valueCallback;
+      //  openImageChooserActivity();
+    }
+
+
+    @Override
+    public boolean onShowFileChooser(WebView webView, ValueCallback&lt;Uri[]&gt; filePathCallback,FileChooserParams fileChooserParams) {
+       // uploadMessages = filePathCallback;
+       // openImageChooserActivity();
+        return false;
+    }
+
+    @Override
+    public boolean onJsAlert(WebView view, String url, String message, JsResult result) {
+        Log.d(&quot;webView:Message值&quot;, message);
+        //result.confirm();
+        return true;
+
+    }
+}
+
+private class MyWebViewClient extends WebViewClient {
+    @Override
+    public void onPageStarted(WebView view, String url, Bitmap favicon) {
+        super.onPageStarted(view, url, favicon);
+
+       // textViewTitle.setText(&quot;加载中...&quot;);
+    }
+
+    @Override
+    public boolean shouldOverrideUrlLoading(WebView view, String url) {
+        return super.shouldOverrideUrlLoading(view, url);
+    }
+
+    @Override
+    public void onPageFinished(WebView view, String url) {
+        super.onPageFinished(view, url);
+    }
+}
+</code></pre><p>}</p>
+<hr>
+<hr>
+<hr>
+<hr>
+<p><strong>JAVA中回调JS的方法</strong></p>
+<p>package mvp.zzx.com.abc;</p>
+<p>import android.graphics.Bitmap;<br>import android.net.Uri;<br>import android.os.Bundle;<br>import android.support.v7.app.AppCompatActivity;<br>import android.util.Log;<br>import android.webkit.JavascriptInterface;<br>import android.webkit.JsResult;<br>import android.webkit.ValueCallback;<br>import android.webkit.WebChromeClient;<br>import android.webkit.WebSettings;<br>import android.webkit.WebView;<br>import android.webkit.WebViewClient;<br>import android.widget.Toast;</p>
+<p>public class MainActivity1 extends AppCompatActivity {</p>
+<pre><code>private WebView webView;
+
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+ String   url=&quot;http://192.168.1.173:8080/xm1/111111111.html&quot;;
+    setContentView(R.layout.activity_main);
+    webView = (WebView) findViewById(R.id.webview);
+    initWebview();
+    webView.loadUrl(url);
+}
+private void initWebview() {
+
+    webView.getSettings().setJavaScriptEnabled(true);
+    webView.getSettings().setDomStorageEnabled(true);//dom  store
+    webView.getSettings().setAllowFileAccess(true);//默认就是允许的
+    webView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
+    webView.getSettings().setAppCacheEnabled(false);//设置app缓存
+    webView.getSettings().setDatabaseEnabled(true);//设置数据库
+    webView.setWebViewClient(new MyWebViewClient());
+    webView.setWebChromeClient(new MyWebChromeClient());
+    //这里运用了js调java
+   // webView.addJavascriptInterface(this,&quot;GuaniuWebBridge&quot;);
+    webView.addJavascriptInterface(this,&quot;html5&quot;);//这里的name是自定义的跟js端相同即可
+    //只需js端调用backTop方法即可  window.html5.backTop();
+
+    //H5端
+</code></pre><p>/*        &lt;!DOCTYPE html&gt;</p>
+<p><html><br>    <head><br>        <meta charset="UTF-8"><br>        <title></title><br>    </head><br>    <body><br>    <button onclick="toastMessage()">返回上层</button><br>    <script type="text/javascript"><br>                function toastMessage() {<br>            window.html5.backTop()<br>        }<br>    </script><br>    </body><br></html>*/<br>    }<br>    @JavascriptInterface<br>    public void backTop(){<br>        Toast.makeText(this,”js调用了java的方法成功”,Toast.LENGTH_LONG).show();<br>    }</p>
+<pre><code>final private class MyWebChromeClient extends WebChromeClient {
+
+
+    @Override
+    public void onReceivedTitle(WebView view, String title) {
+        super.onReceivedTitle(view, title);
+        //textViewTitle.setText(title);
+    }
+
+    // For Android &lt; 3.0
+    public void openFileChooser(ValueCallback&lt;Uri&gt; valueCallback) {
+      //  uploadMessage = valueCallback;
+       // openImageChooserActivity();
+    }
+
+    // For Android  &gt;= 3.0
+    public void openFileChooser(ValueCallback valueCallback, String acceptType) {
+      //  uploadMessage = valueCallback;
+      //  openImageChooserActivity();
+    }
+
+    //For Android  &gt;= 4.1
+    public void openFileChooser(ValueCallback&lt;Uri&gt; valueCallback, String acceptType, String capture) {
+       // uploadMessage = valueCallback;
+      //  openImageChooserActivity();
+    }
+
+
+    @Override
+    public boolean onShowFileChooser(WebView webView, ValueCallback&lt;Uri[]&gt; filePathCallback,FileChooserParams fileChooserParams) {
+       // uploadMessages = filePathCallback;
+       // openImageChooserActivity();
+        return false;
+    }
+
+    @Override
+    public boolean onJsAlert(WebView view, String url, String message, JsResult result) {
+        Log.d(&quot;webView:Message值&quot;, message);
+        //result.confirm();
+        return true;
+
+    }
+}
+
+private class MyWebViewClient extends WebViewClient {
+    @Override
+    public void onPageStarted(WebView view, String url, Bitmap favicon) {
+        super.onPageStarted(view, url, favicon);
+
+       // textViewTitle.setText(&quot;加载中...&quot;);
+    }
+
+    @Override
+    public boolean shouldOverrideUrlLoading(WebView view, String url) {
+        return super.shouldOverrideUrlLoading(view, url);
+    }
+
+    @Override
+    public void onPageFinished(WebView view, String url) {
+        super.onPageFinished(view, url);
+        testMethod(webView);
+
+    }
+}
+private void testMethod(WebView webView) {
+    String call = &quot;javascript:sayHello()&quot;;
+    call = &quot;javascript:alertMessage(\&quot;&quot; + &quot;content&quot; + &quot;\&quot;)&quot;;
+    call = &quot;javascript:toastMessage(\&quot;&quot; + &quot;content&quot; + &quot;\&quot;)&quot;;
+    //我通过调用javascript:   h5的方法名称调用h5的方法,然后本地些本地方法,h5端通过(window.约定的name.方法名)调用我的方法给我回传数值
+    call = &quot;javascript:sumToJava(1,2)&quot;;
+    webView.loadUrl(call);
+}
+@JavascriptInterface public void toastMessage(String message) {
+    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+}
+@JavascriptInterface public void onSumResult(int result) { //
+     }
+</code></pre><p>/*&lt;!DOCTYPE html&gt;</p>
+<p><html><br>    <head><br>        <meta charset="UTF-8"><br>        <title></title><br>    </head><br>    <body><br>    <button onclick="toastMessage()">返回上层</button><br>    <script type="text/javascript"><br>    function sayHello() {alert(“Hello”)}<br>    function alertMessage(message) {<br>        alert(message)<br>    }<br>    function toastMessage(message) {<br>        window.html5.toastMessage(message)<br>    }<br>    function sumToJava(number1, number2){<br>        window.html5.onSumResult(number1 + number2)<br>    }<br>    function toastMessage() {<br>        window.html5.backTop()<br>    }<br>    </script><br>    </body><br></html>*/</p>
+<p>}</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
     
       
 
@@ -257,7 +588,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Veröffentlicht am</span>
+                <span class="post-meta-item-text">Posté le</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-12-14T16:21:05+08:00">
                 2017-12-14
@@ -401,7 +732,7 @@ getItem(movies)
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Veröffentlicht am</span>
+                <span class="post-meta-item-text">Posté le</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-12-12T11:31:51+08:00">
                 2017-12-12
@@ -591,7 +922,7 @@ for (int position = 0; position &lt; HEADERS.length; position++) {
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Veröffentlicht am</span>
+                <span class="post-meta-item-text">Posté le</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-12-08T14:35:28+08:00">
                 2017-12-08
@@ -726,7 +1057,7 @@ for (int position = 0; position &lt; HEADERS.length; position++) {
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Veröffentlicht am</span>
+                <span class="post-meta-item-text">Posté le</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-12-07T17:04:50+08:00">
                 2017-12-07
@@ -846,7 +1177,7 @@ for (int position = 0; position &lt; HEADERS.length; position++) {
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Veröffentlicht am</span>
+                <span class="post-meta-item-text">Posté le</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-12-07T16:05:16+08:00">
                 2017-12-07
@@ -1037,7 +1368,7 @@ FileDownloader.getImpl().create(url)
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Veröffentlicht am</span>
+                <span class="post-meta-item-text">Posté le</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-12-07T15:20:00+08:00">
                 2017-12-07
@@ -1162,8 +1493,8 @@ FileDownloader.getImpl().create(url)
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">6</span>
-                  <span class="site-state-item-name">Artikel</span>
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">articles</span>
                 </a>
               </div>
             
@@ -1215,7 +1546,7 @@ FileDownloader.getImpl().create(url)
 </div>
 
 
-  <div class="powered-by">Erstellt mit  <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
 
 
 
@@ -1223,7 +1554,7 @@ FileDownloader.getImpl().create(url)
 
 
 
-  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.3</div>
+  <div class="theme-info">Thème &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.3</div>
 
 
 
