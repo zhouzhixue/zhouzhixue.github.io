@@ -79,17 +79,17 @@
 
 
 
-<meta name="description" content="title: Aes加密解密 date: 2017-12-07 16:49:50package com.wildcode.maliwallet.utils; import javax.crypto.Cipher;import javax.crypto.spec.IvParameterSpec;import javax.crypto.spec.SecretKeySpec; import Decod">
+<meta name="description" content="互联网生涯的点滴">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Aes加密解密">
+<meta property="og:title" content="tags">
 <meta property="og:url" content="https://zhouzhixue.github.io/tags/index.html">
 <meta property="og:site_name" content="志学博客">
-<meta property="og:description" content="title: Aes加密解密 date: 2017-12-07 16:49:50package com.wildcode.maliwallet.utils; import javax.crypto.Cipher;import javax.crypto.spec.IvParameterSpec;import javax.crypto.spec.SecretKeySpec; import Decod">
+<meta property="og:description" content="互联网生涯的点滴">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-12-20T08:24:22.500Z">
+<meta property="og:updated_time" content="2017-12-20T09:06:39.989Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Aes加密解密">
-<meta name="twitter:description" content="title: Aes加密解密 date: 2017-12-07 16:49:50package com.wildcode.maliwallet.utils; import javax.crypto.Cipher;import javax.crypto.spec.IvParameterSpec;import javax.crypto.spec.SecretKeySpec; import Decod">
+<meta name="twitter:title" content="tags">
+<meta name="twitter:description" content="互联网生涯的点滴">
 
 
 
@@ -125,7 +125,7 @@
 
 
 
-  <title>Aes加密解密 | 志学博客</title>
+  <title>tags | 志学博客</title>
   
 
 
@@ -245,7 +245,7 @@
     <div class="post-block page">
       <header class="post-header">
 
-	<h1 class="post-title" itemprop="name headline">Aes加密解密</h1>
+	<h1 class="post-title" itemprop="name headline">tags</h1>
 
 
 
@@ -257,144 +257,14 @@
       <div class="post-body">
         
         
-          <hr>
-<p>title: Aes加密解密</p>
-<h2 id="date-2017-12-07-16-49-50"><a href="#date-2017-12-07-16-49-50" class="headerlink" title="date: 2017-12-07 16:49:50"></a>date: 2017-12-07 16:49:50</h2><p>package com.wildcode.maliwallet.utils;</p>
-<p>import javax.crypto.Cipher;<br>import javax.crypto.spec.IvParameterSpec;<br>import javax.crypto.spec.SecretKeySpec;</p>
-<p>import Decoder.BASE64Decoder;<br>import Decoder.BASE64Encoder;</p>
-<p>//import sun.misc.BASE64Decoder;<br>//import sun.misc.BASE64Encoder;</p>
-<p>/**</p>
-<ul>
-<li>**## AES 是一种可逆加密算法，对用户的敏感信息加密处理</li>
-<li><p>对原始数据进行AES加密后，在进行Base64编码转化； ##<em>*
-</em>/<br>public class AesCBC {<br>/*</p>
-<ul>
-<li>加密用的Key 可以用26个字母和数字组成</li>
-<li><p>此处使用AES-128-CBC加密模式，key需要为16位。<br>*/<br>// private static String sKey=”sklhdflsjfsdgdeg”;<br>// private static String ivParameter=”cfbsdfgsdfxccvd1”;<br>// private static AesCBC instance=null;</p>
-<p>private static String sKey = “418c764b9f0f202d”;<br>private static String ivParameter = “424827A5858CC3BD”;<br>private static AesCBC instance = null;</p>
-<p>private AesCBC() {</p>
-<p>}</p>
-<p>public static AesCBC getInstance() {<br>   if (instance == null) instance = new AesCBC();<br>   return instance;<br>}</p>
-<p>// 加密<br>public static String encrypt(String sSrc, String encodingFormat, String sKey, String ivParameter)<br>   throws Exception {<br>   Cipher cipher = Cipher.getInstance(“AES/CBC/PKCS5Padding”);<br>   byte[] raw = sKey.getBytes();<br>   SecretKeySpec skeySpec = new SecretKeySpec(raw, “AES”);<br>   IvParameterSpec iv =</p>
-<pre><code>new IvParameterSpec(ivParameter.getBytes());//使用CBC模式，需要一个向量iv，可增加加密算法的强度
-</code></pre><p>   cipher.init(Cipher.ENCRYPT_MODE, skeySpec, iv);<br>   byte[] encrypted = cipher.doFinal(sSrc.getBytes(encodingFormat));<br>   return new BASE64Encoder().encode(encrypted);//此处使用BASE64做转码。<br>}</p>
-<p>public String encrypt(String sSrc) {<br>   try {</p>
-<pre><code>return encrypt(sSrc, &quot;utf-8&quot;, sKey, ivParameter);
-</code></pre><p>   } catch (Exception e) {</p>
-<pre><code>e.printStackTrace();
-</code></pre><p>   }<br>   return null;<br>}</p>
-<p>public String decrypt(String sSrc) {<br>   try {</p>
-<pre><code>return decrypt(sSrc, &quot;utf-8&quot;, sKey, ivParameter);
-</code></pre><p>   } catch (Exception e) {</p>
-<pre><code>e.printStackTrace();
-</code></pre><p>   }<br>   return null;<br>}</p>
-<p>// 解密<br>public String decrypt(String sSrc, String encodingFormat, String sKey, String ivParameter)<br>   throws Exception {<br>   try {</p>
-<pre><code>byte[] raw = sKey.getBytes(&quot;ASCII&quot;);
-SecretKeySpec skeySpec = new SecretKeySpec(raw, &quot;AES&quot;);
-Cipher cipher = Cipher.getInstance(&quot;AES/CBC/NoPadding&quot;);
-IvParameterSpec iv = new IvParameterSpec(ivParameter.getBytes());
-cipher.init(Cipher.DECRYPT_MODE, skeySpec, iv);
-byte[] encrypted1 = new BASE64Decoder().decodeBuffer(sSrc);//先用base64解密
-byte[] original = cipher.doFinal(encrypted1);
-String originalString = new String(original, encodingFormat);
-return originalString.trim();
-</code></pre><p>   } catch (Exception ex) {</p>
-<pre><code>//System.out.println(ex);
-ex.printStackTrace();
-return null;
-</code></pre><p>   }<br>}</p>
-<p>public static void main(String[] args) throws Exception {</p>
-<p>   String enString=”DtHm4HTSO54ZbsmPBoknCaKAnVd4MWlGoy2tbhJjX6wk8JagLjT5eYg+UpHkWa8w+k\/zoOCtwj\/A5E75ogfvb6kHu6eG2MFC6\/pUBa7y6DuiZqmdJ9DRBBiNOOPeIubObglQ1s0UoOpPDuX3iPiKeTMgZPElaHN+ForOjsLqkO6hT9PvdHD0bDn7AVTlG+ClvPHdH5+mf52f85rT2TqBKeN0Z5WQKvITJAJ58g28qq0a++tjlh\/u68U\/To29HrCSaYuuITYzSYt3D8g+FPa+EzKTm4RDkW0vmHhZVhOhZ65ncYGgFra92ybhSrm+Y7Ay09f\/N+cSVNBA+JqxIGk1JXnh1FNPGFiH\/fLDIdzW\/4m2yyyI\/X\/t61\/xWzw7zn44”;</p>
-</li>
-</ul>
-</li>
-</ul>
-<p>//        System.out.println(“加密前的字串是：” + enString);<br>//        String string = AesCBC.getInstance().encrypt(enString, “utf-8”, sKey, ivParameter);<br>//        System.out.println(“加密后的字串是：” + string);<br>        // 解密<br>        String strings = AesCBC.getInstance().decrypt(enString);<br>        System.out.println(“解密后的字串是：” + strings.length());<br>        System.out.println(“——- “);<br>    }<br>}</p>
-<p>=====================================================================</p>
-<p>请求数据加密\</p>
-<p>package com.wildcode.maliwallet.service.base;</p>
-<p>import android.util.Log;<br>import com.google.gson.Gson;<br>import com.wildcode.maliwallet.common.Constant;<br>import com.wildcode.maliwallet.utils.AesCBC;</p>
-<p>/**</p>
-<ul>
-<li><p>Created by FangJie on 16/1/7.<br>*/<br>public class BaseReqData {</p>
-<p> public String decode() {</p>
-<pre><code>String gson = new Gson().toJson(this);
-if (Constant.isDebug)
-    Log.i(&quot;OkHttp&quot;, gson);
-String encode = AesCBC.getInstance().encrypt(gson);
-encode = encode.replaceAll(&quot;\\s+&quot;, &quot;&quot;);
-if (Constant.isDebug)
-    Log.i(&quot;OkHttp&quot;, &quot;encode:&quot; + encode);
-return encode;
-</code></pre><p> }</p>
-</li>
-</ul>
-<p>}</p>
-<p>返回数据解密</p>
-<p>package com.wildcode.maliwallet.service.base;</p>
-<p>import com.google.gson.Gson;<br>import com.wildcode.maliwallet.common.Constant;<br>import com.wildcode.maliwallet.utils.AesCBC;<br>import com.wildcode.maliwallet.utils.LogUtil;</p>
-<p>import java.io.IOException;<br>import java.io.Reader;<br>import java.io.StringReader;<br>import java.lang.reflect.Type;<br>import org.apache.commons.io.IOUtils;<br>import org.json.JSONArray;<br>import org.json.JSONException;<br>import org.json.JSONObject;<br>import org.json.JSONTokener;</p>
-<p>import okhttp3.ResponseBody;<br>import retrofit2.Converter;</p>
-<p>final class AesResponseBodyCbcConverter<t> implements Converter<responsebody, t=""> {</responsebody,></t></p>
-<pre><code>public static final String TAG = &quot;OkHttp&quot;;
-
-private final Gson gson;
-private final Type type;
-
-AesResponseBodyCbcConverter(Gson gson, Type type) {
-    this.gson = gson;
-    this.type = type;
-}
-
-@Override
-public T convert(ResponseBody value) throws IOException {
-    Reader reader = value.charStream();
-    String targetString;
-    targetString= IOUtils.toString(reader);
-    LogUtil.LogShitou(&quot;targetString:&quot;+targetString);
-    if (targetString.contains(&quot;&lt;&quot;) &amp;&amp; targetString.contains(&quot;&gt;&quot;)) {
-        //targetString=targetString.substring(targetString.lastIndexOf(&quot;&gt;&quot;)+1);
-        targetString = targetString.substring(targetString.indexOf(&quot;{&quot;),
-                targetString.lastIndexOf(&quot;}&quot;) + 1);
-    }
-    reader = new StringReader(targetString);
-    try {
-        JSONObject jsonObject = new JSONObject(targetString);
-        if (jsonObject.has(&quot;data&quot;)) {
-            String data = jsonObject.optString(&quot;data&quot;);
-
-            String parseData = AesCBC.getInstance().decrypt(data);
-            jsonObject.remove(&quot;data&quot;);
-            Object json = new JSONTokener(parseData).nextValue();
-            if (json instanceof JSONObject) {
-                jsonObject.put(&quot;data&quot;, new JSONObject(parseData));
-            } else if (json instanceof JSONArray) {
-                jsonObject.put(&quot;data&quot;, new JSONArray(parseData));
-            } else {
-                jsonObject.put(&quot;data&quot;, parseData);
-            }
-            if (Constant.isDebug)
-                LogUtil.LogShitou(TAG, &quot;AES Decode Data:&quot; + jsonObject.toString());
-            reader = new StringReader(jsonObject.toString());
-        }
-    } catch (JSONException e) {
-        if (Constant.isDebug)
-            LogUtil.LogShitou(TAG, e.toString());
-        e.printStackTrace();
-    }
-
-    try {
-        return gson.fromJson(reader, type);
-    } finally {
-        if (reader == null) ;
-        try {
-            reader.close();
-        } catch (IOException ignored) {
-        }
-    }
-}
-</code></pre><p>}</p>
-
+          <div class="tag-cloud">
+            <div class="tag-cloud-title">
+                目前共计 2 个标签
+            </div>
+            <div class="tag-cloud-tags">
+              <a href="/tags/android/" style="font-size: 12px; color: #ccc">android</a> <a href="/tags/python/" style="font-size: 12px; color: #ccc">python</a>
+            </div>
+          </div>
         
       </div>
       
@@ -412,10 +282,6 @@ public T convert(ResponseBody value) throws IOException {
 
 
           
-
-  
-
-
 
         </div>
         
@@ -436,17 +302,8 @@ public T convert(ResponseBody value) throws IOException {
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            站点概览
-          </li>
-        </ul>
-      
 
-      <section class="site-overview-wrap sidebar-panel">
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -482,10 +339,10 @@ public T convert(ResponseBody value) throws IOException {
               
               
               <div class="site-state-item site-state-tags">
-                
+                <a href="/tags/index.html">
                   <span class="site-state-item-count">2</span>
                   <span class="site-state-item-name">标签</span>
-                
+                </a>
               </div>
             
 
@@ -508,22 +365,6 @@ public T convert(ResponseBody value) throws IOException {
         </div>
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#date-2017-12-07-16-49-50"><span class="nav-number">1.</span> <span class="nav-text"><a href="#date-2017-12-07-16-49-50" class="headerlink" title="date: 2017-12-07 16:49:50"></a>date: 2017-12-07 16:49:50</span></a></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
 
       
