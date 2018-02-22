@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Android," />
+  <meta name="keywords" content="Hexo, NexT" />
 
 
 
@@ -79,18 +79,17 @@
 
 
 
-<meta name="description" content="添加以下样式(无边界(borderless))style=”?android:attr/borderlessButtonStyle”">
-<meta name="keywords" content="Android">
+<meta name="description" content="package com.wildcode.maliwallet.widget; import android.annotation.SuppressLint;import android.content.Context;import android.graphics.Rect;import android.util.AttributeSet;import android.view.MotionEv">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Button去除阴影">
-<meta property="og:url" content="https://zhouzhixue.github.io/2017/12/07/Button去除阴影/index.html">
+<meta property="og:title" content="自定义view之带弹性的view">
+<meta property="og:url" content="https://zhouzhixue.github.io/2018/02/22/自定义view之带弹性的view/index.html">
 <meta property="og:site_name" content="志学博客">
-<meta property="og:description" content="添加以下样式(无边界(borderless))style=”?android:attr/borderlessButtonStyle”">
+<meta property="og:description" content="package com.wildcode.maliwallet.widget; import android.annotation.SuppressLint;import android.content.Context;import android.graphics.Rect;import android.util.AttributeSet;import android.view.MotionEv">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-12-21T03:34:29.778Z">
+<meta property="og:updated_time" content="2018-02-22T03:20:46.696Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Button去除阴影">
-<meta name="twitter:description" content="添加以下样式(无边界(borderless))style=”?android:attr/borderlessButtonStyle”">
+<meta name="twitter:title" content="自定义view之带弹性的view">
+<meta name="twitter:description" content="package com.wildcode.maliwallet.widget; import android.annotation.SuppressLint;import android.content.Context;import android.graphics.Rect;import android.util.AttributeSet;import android.view.MotionEv">
 
 
 
@@ -120,13 +119,13 @@
 
 
 
-  <link rel="canonical" href="https://zhouzhixue.github.io/2017/12/07/Button去除阴影/"/>
+  <link rel="canonical" href="https://zhouzhixue.github.io/2018/02/22/自定义view之带弹性的view/"/>
 
 
 
 
 
-  <title>Button去除阴影 | 志学博客</title>
+  <title>自定义view之带弹性的view | 志学博客</title>
   
 
 
@@ -233,7 +232,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://zhouzhixue.github.io/2017/12/07/Button去除阴影/">
+    <link itemprop="mainEntityOfPage" href="https://zhouzhixue.github.io/2018/02/22/自定义view之带弹性的view/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="周志学">
@@ -250,7 +249,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Button去除阴影</h1>
+          <h1 class="post-title" itemprop="name headline">自定义view之带弹性的view</h1>
         
 
         <div class="post-meta">
@@ -262,8 +261,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-07T17:04:50+08:00">
-                2017-12-07
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-22T11:19:21+08:00">
+                2018-02-22
               </time>
             
 
@@ -273,29 +272,9 @@
           </span>
 
           
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Android/" itemprop="url" rel="index">
-                    <span itemprop="name">Android</span>
-                  </a>
-                </span>
 
-                
-                
-              
-            </span>
           
-
+            
           
 
           
@@ -320,7 +299,136 @@
       
 
       
-        <h2 id="添加以下样式-无边界-borderless"><a href="#添加以下样式-无边界-borderless" class="headerlink" title="添加以下样式(无边界(borderless))"></a>添加以下样式(无边界(borderless))</h2><p>style=”?android:attr/borderlessButtonStyle”</p>
+        <pre><code>package com.wildcode.maliwallet.widget;
+</code></pre><p>import android.annotation.SuppressLint;<br>import android.content.Context;<br>import android.graphics.Rect;<br>import android.util.AttributeSet;<br>import android.view.MotionEvent;<br>import android.view.View;<br>import android.view.animation.TranslateAnimation;<br>import android.widget.ScrollView;</p>
+<p>/**</p>
+<ul>
+<li>有弹性的ScrollView</li>
+<li><p>实现下拉弹回和上拉弹回<br>*/<br>public class ReboundScrollView extends ScrollView {</p>
+<p> private static final String TAG = “ElasticScrollView”;</p>
+<p> //移动因子, 是一个百分比, 比如手指移动了100px, 那么View就只移动50px<br> //目的是达到一个延迟的效果<br> private static final float MOVE_FACTOR = 0.5f;</p>
+<p> //松开手指后, 界面回到正常位置需要的动画时间<br> private static final int ANIM_TIME = 300;</p>
+<p> //ScrollView的子View， 也是ScrollView的唯一一个子View<br> private View contentView;</p>
+<p> //手指按下时的Y值, 用于在移动时计算移动距离<br> //如果按下时不能上拉和下拉， 会在手指移动时更新为当前手指的Y值<br> private float startY;</p>
+<p> //用于记录正常的布局位置<br> private Rect originalRect = new Rect();</p>
+<p> //手指按下时记录是否可以继续下拉<br> private boolean canPullDown = false;</p>
+<p> //手指按下时记录是否可以继续上拉<br> private boolean canPullUp = false;</p>
+<p> //在手指滑动的过程中记录是否移动了布局<br> private boolean isMoved = false;</p>
+<p> public ReboundScrollView(Context context) {</p>
+<pre><code>super(context);
+</code></pre><p> }</p>
+<p> public ReboundScrollView(Context context, AttributeSet attrs) {</p>
+<pre><code>super(context, attrs);
+</code></pre><p> }</p>
+<p> @SuppressLint(“MissingSuperCall”)<br> @Override<br> protected void onFinishInflate() {</p>
+<pre><code>if (getChildCount() &gt; 0) {
+    contentView = getChildAt(0);
+}
+</code></pre><p> }</p>
+<p> @Override<br> protected void onLayout(boolean changed, int l, int t, int r, int b) {</p>
+<pre><code>super.onLayout(changed, l, t, r, b);
+
+if(contentView == null) return;
+
+//ScrollView中的唯一子控件的位置信息, 这个位置信息在整个控件的生命周期中保持不变
+originalRect.set(contentView.getLeft(), contentView.getTop(), contentView
+        .getRight(), contentView.getBottom());
+</code></pre><p> }</p>
+<p> /**</p>
+<ul>
+<li><p>在触摸事件中, 处理上拉和下拉的逻辑<br>*/<br>@Override<br>public boolean dispatchTouchEvent(MotionEvent ev) {</p>
+<p> if (contentView == null) {</p>
+<pre><code>return super.dispatchTouchEvent(ev);
+</code></pre><p> }</p>
+<p> int action = ev.getAction();</p>
+<p> switch (action) {</p>
+<pre><code>case MotionEvent.ACTION_DOWN:
+
+    //判断是否可以上拉和下拉
+    canPullDown = isCanPullDown();
+    canPullUp = isCanPullUp();
+
+    //记录按下时的Y值
+    startY = ev.getY();
+    break;
+
+case MotionEvent.ACTION_UP:
+
+    if(!isMoved) break;  //如果没有移动布局， 则跳过执行
+
+    // 开启动画
+    TranslateAnimation anim = new TranslateAnimation(0, 0, contentView.getTop(),
+            originalRect.top);
+    anim.setDuration(ANIM_TIME);
+
+    contentView.startAnimation(anim);
+
+    // 设置回到正常的布局位置
+    contentView.layout(originalRect.left, originalRect.top,
+            originalRect.right, originalRect.bottom);
+
+    //将标志位设回false
+    canPullDown = false;
+    canPullUp = false;
+    isMoved = false;
+
+    break;
+case MotionEvent.ACTION_MOVE:
+
+    //在移动的过程中， 既没有滚动到可以上拉的程度， 也没有滚动到可以下拉的程度
+    if(!canPullDown &amp;&amp; !canPullUp) {
+        startY = ev.getY();
+        canPullDown = isCanPullDown();
+        canPullUp = isCanPullUp();
+
+        break;
+    }
+
+    //计算手指移动的距离
+    float nowY = ev.getY();
+    int deltaY = (int) (nowY - startY);
+
+    //是否应该移动布局
+    boolean shouldMove =
+            (canPullDown &amp;&amp; deltaY &gt; 0)    //可以下拉， 并且手指向下移动
+                    || (canPullUp &amp;&amp; deltaY&lt; 0)    //可以上拉， 并且手指向上移动
+                    || (canPullUp &amp;&amp; canPullDown); //既可以上拉也可以下拉（这种情况出现在ScrollView包裹的控件比ScrollView还小）
+
+    if(shouldMove){
+        //计算偏移量
+        int offset = (int)(deltaY * MOVE_FACTOR);
+
+        //随着手指的移动而移动布局
+        contentView.layout(originalRect.left, originalRect.top + offset,
+                originalRect.right, originalRect.bottom + offset);
+
+        isMoved = true;  //记录移动了布局
+    }
+
+    break;
+default:
+    break;
+</code></pre><p> }</p>
+<p> return super.dispatchTouchEvent(ev);<br>}</p>
+</li>
+</ul>
+</li>
+</ul>
+<pre><code>/**
+ * 判断是否滚动到顶部
+ */
+private boolean isCanPullDown() {
+    return getScrollY() == 0 ||
+            contentView.getHeight() &lt; getHeight() + getScrollY();
+}
+
+/**
+ * 判断是否滚动到底部
+ */
+private boolean isCanPullUp() {
+    return  contentView.getHeight() &lt;= getHeight() + getScrollY();
+}
+</code></pre><p>}</p>
 
       
     </div>
@@ -360,12 +468,6 @@
 
     <footer class="post-footer">
       
-        <div class="post-tags">
-          
-            <a href="/tags/Android/" rel="tag"># Android</a>
-          
-        </div>
-      
 
       
       
@@ -375,8 +477,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/12/07/文件下载并存图片格式-并在图库显示/" rel="next" title="文件下载并存图片格式,并在图库显示">
-                <i class="fa fa-chevron-left"></i> 文件下载并存图片格式,并在图库显示
+              <a href="/2018/01/03/Android的启动模式/" rel="next" title="Android的启动模式">
+                <i class="fa fa-chevron-left"></i> Android的启动模式
               </a>
             
           </div>
@@ -384,10 +486,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/12/07/初次启动app白屏问题解决/" rel="prev" title="初次启动app白屏问题解决">
-                初次启动app白屏问题解决 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -416,6 +514,10 @@
 
           
 
+  
+
+
+
         </div>
         
           
@@ -435,17 +537,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            站点概览
-          </li>
-        </ul>
-      
 
-      <section class="site-overview-wrap sidebar-panel">
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -507,22 +600,6 @@
         </div>
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#添加以下样式-无边界-borderless"><span class="nav-number">1.</span> <span class="nav-text"><a href="#&#x6DFB;&#x52A0;&#x4EE5;&#x4E0B;&#x6837;&#x5F0F;-&#x65E0;&#x8FB9;&#x754C;-borderless" class="headerlink" title="&#x6DFB;&#x52A0;&#x4EE5;&#x4E0B;&#x6837;&#x5F0F;(&#x65E0;&#x8FB9;&#x754C;(borderless))"></a>&#x6DFB;&#x52A0;&#x4EE5;&#x4E0B;&#x6837;&#x5F0F;(&#x65E0;&#x8FB9;&#x754C;(borderless))</span></a></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
 
       

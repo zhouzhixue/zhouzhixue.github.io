@@ -232,6 +232,376 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://zhouzhixue.github.io/2018/02/22/自定义view之带弹性的view/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="周志学">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="志学博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/02/22/自定义view之带弹性的view/" itemprop="url">自定义view之带弹性的view</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-22T11:19:21+08:00">
+                2018-02-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <pre><code>package com.wildcode.maliwallet.widget;
+</code></pre><p>import android.annotation.SuppressLint;<br>import android.content.Context;<br>import android.graphics.Rect;<br>import android.util.AttributeSet;<br>import android.view.MotionEvent;<br>import android.view.View;<br>import android.view.animation.TranslateAnimation;<br>import android.widget.ScrollView;</p>
+<p>/**</p>
+<ul>
+<li>有弹性的ScrollView</li>
+<li><p>实现下拉弹回和上拉弹回<br>*/<br>public class ReboundScrollView extends ScrollView {</p>
+<p> private static final String TAG = “ElasticScrollView”;</p>
+<p> //移动因子, 是一个百分比, 比如手指移动了100px, 那么View就只移动50px<br> //目的是达到一个延迟的效果<br> private static final float MOVE_FACTOR = 0.5f;</p>
+<p> //松开手指后, 界面回到正常位置需要的动画时间<br> private static final int ANIM_TIME = 300;</p>
+<p> //ScrollView的子View， 也是ScrollView的唯一一个子View<br> private View contentView;</p>
+<p> //手指按下时的Y值, 用于在移动时计算移动距离<br> //如果按下时不能上拉和下拉， 会在手指移动时更新为当前手指的Y值<br> private float startY;</p>
+<p> //用于记录正常的布局位置<br> private Rect originalRect = new Rect();</p>
+<p> //手指按下时记录是否可以继续下拉<br> private boolean canPullDown = false;</p>
+<p> //手指按下时记录是否可以继续上拉<br> private boolean canPullUp = false;</p>
+<p> //在手指滑动的过程中记录是否移动了布局<br> private boolean isMoved = false;</p>
+<p> public ReboundScrollView(Context context) {</p>
+<pre><code>super(context);
+</code></pre><p> }</p>
+<p> public ReboundScrollView(Context context, AttributeSet attrs) {</p>
+<pre><code>super(context, attrs);
+</code></pre><p> }</p>
+<p> @SuppressLint(“MissingSuperCall”)<br> @Override<br> protected void onFinishInflate() {</p>
+<pre><code>if (getChildCount() &gt; 0) {
+    contentView = getChildAt(0);
+}
+</code></pre><p> }</p>
+<p> @Override<br> protected void onLayout(boolean changed, int l, int t, int r, int b) {</p>
+<pre><code>super.onLayout(changed, l, t, r, b);
+
+if(contentView == null) return;
+
+//ScrollView中的唯一子控件的位置信息, 这个位置信息在整个控件的生命周期中保持不变
+originalRect.set(contentView.getLeft(), contentView.getTop(), contentView
+        .getRight(), contentView.getBottom());
+</code></pre><p> }</p>
+<p> /**</p>
+<ul>
+<li><p>在触摸事件中, 处理上拉和下拉的逻辑<br>*/<br>@Override<br>public boolean dispatchTouchEvent(MotionEvent ev) {</p>
+<p> if (contentView == null) {</p>
+<pre><code>return super.dispatchTouchEvent(ev);
+</code></pre><p> }</p>
+<p> int action = ev.getAction();</p>
+<p> switch (action) {</p>
+<pre><code>case MotionEvent.ACTION_DOWN:
+
+    //判断是否可以上拉和下拉
+    canPullDown = isCanPullDown();
+    canPullUp = isCanPullUp();
+
+    //记录按下时的Y值
+    startY = ev.getY();
+    break;
+
+case MotionEvent.ACTION_UP:
+
+    if(!isMoved) break;  //如果没有移动布局， 则跳过执行
+
+    // 开启动画
+    TranslateAnimation anim = new TranslateAnimation(0, 0, contentView.getTop(),
+            originalRect.top);
+    anim.setDuration(ANIM_TIME);
+
+    contentView.startAnimation(anim);
+
+    // 设置回到正常的布局位置
+    contentView.layout(originalRect.left, originalRect.top,
+            originalRect.right, originalRect.bottom);
+
+    //将标志位设回false
+    canPullDown = false;
+    canPullUp = false;
+    isMoved = false;
+
+    break;
+case MotionEvent.ACTION_MOVE:
+
+    //在移动的过程中， 既没有滚动到可以上拉的程度， 也没有滚动到可以下拉的程度
+    if(!canPullDown &amp;&amp; !canPullUp) {
+        startY = ev.getY();
+        canPullDown = isCanPullDown();
+        canPullUp = isCanPullUp();
+
+        break;
+    }
+
+    //计算手指移动的距离
+    float nowY = ev.getY();
+    int deltaY = (int) (nowY - startY);
+
+    //是否应该移动布局
+    boolean shouldMove =
+            (canPullDown &amp;&amp; deltaY &gt; 0)    //可以下拉， 并且手指向下移动
+                    || (canPullUp &amp;&amp; deltaY&lt; 0)    //可以上拉， 并且手指向上移动
+                    || (canPullUp &amp;&amp; canPullDown); //既可以上拉也可以下拉（这种情况出现在ScrollView包裹的控件比ScrollView还小）
+
+    if(shouldMove){
+        //计算偏移量
+        int offset = (int)(deltaY * MOVE_FACTOR);
+
+        //随着手指的移动而移动布局
+        contentView.layout(originalRect.left, originalRect.top + offset,
+                originalRect.right, originalRect.bottom + offset);
+
+        isMoved = true;  //记录移动了布局
+    }
+
+    break;
+default:
+    break;
+</code></pre><p> }</p>
+<p> return super.dispatchTouchEvent(ev);<br>}</p>
+</li>
+</ul>
+</li>
+</ul>
+<pre><code>/**
+ * 判断是否滚动到顶部
+ */
+private boolean isCanPullDown() {
+    return getScrollY() == 0 ||
+            contentView.getHeight() &lt; getHeight() + getScrollY();
+}
+
+/**
+ * 判断是否滚动到底部
+ */
+private boolean isCanPullUp() {
+    return  contentView.getHeight() &lt;= getHeight() + getScrollY();
+}
+</code></pre><p>}</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://zhouzhixue.github.io/2018/01/03/Android的启动模式/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="周志学">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="志学博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/01/03/Android的启动模式/" itemprop="url">Android的启动模式</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-03T17:03:34+08:00">
+                2018-01-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>andoird的启动模式分4种：<br><br>1.称为standred<br><br>2，称为 singleTop<br><br>3,称为singleTask<br><br>4，称为singleInstance<br><br>1,默认的压站的方式进站，然后通过，back键一个一个弹出，从栈顶到栈底 <br>比如我们进栈顺序是123 <br>那么出栈顺序就是321也就是俗称的先进后出，我么可以把栈想象成弹夹。<br><br>2，singletop设置方式是在activity的mainfast文件里添加lanuchMode属性，拥有此属性的activity在栈顶只存在一个，比如：我们现在有1234在栈中，我们想调1但是1是singletop的那不会重新生成一个1，而是把位于栈底的1调到栈顶。<br><br>3，singletask跟singletop的设置方法一样，但是他的特性是如果栈里有singletask的被重新吊起，那位于他上边的会被清除出栈<br><br>比如：<br><br>栈里有1234 2是singleTask的<br>那么被重新吊起时，栈里只剩12  而34会被清除出去<br></p>
+<p>4，这个模式比较特殊，这是为此activity单另建个栈，独自在本栈运行，这里运用到的属性叫taskaffinity这个属性表示栈的名字<br></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://zhouzhixue.github.io/2017/12/29/2017年度总结和2018的计划/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1719,150 +2089,13 @@ FileDownloader.getImpl().create(url)
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://zhouzhixue.github.io/2017/12/07/Glide去除本地图片缓存/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="周志学">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="志学博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/12/07/Glide去除本地图片缓存/" itemprop="url">Glide的去除图片缓存问题</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-07T15:20:00+08:00">
-                2017-12-07
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Android/" itemprop="url" rel="index">
-                    <span itemprop="name">Android</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>glide<br>Glide.with(OCRResultActivity.this).load(frontIdcard).skipMemoryCache( true ).diskCacheStrategy( DiskCacheStrategy.NONE ).into(imgFrontIdcard);//去除缓存的glide</p>
-<p>.skipMemoryCache().disCacheStrategy(DiskCacheStrategy.none)</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
+  <nav class="pagination">
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+  </nav>
+
 
 
           </div>
@@ -1906,7 +2139,7 @@ FileDownloader.getImpl().create(url)
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-count">11</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1967,7 +2200,7 @@ FileDownloader.getImpl().create(url)
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
